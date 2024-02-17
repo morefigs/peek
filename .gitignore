@@ -1,0 +1,8 @@
+.idea/
+dist/
+build/
+.DS_Store
+.python-version
+poetry.lock
+/.venv/
+__pycache__/
