@@ -1,9 +1,11 @@
 [tool.poetry]
-name = "view"
-version = "0.1.0"
+name = "squiz"
+version = "0.1.1"
 description = "View a Python object's direct and nested attributes."
 authors = ["morefigs"]
 readme = "README.md"
+homepage = "https://github.com/morefigs/squiz/"
+
 
 [tool.poetry.dependencies]
 python = "^3.0"

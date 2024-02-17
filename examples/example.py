@@ -1,4 +1,4 @@
-from view import view
+from squiz import squiz
 
 
 class Data:
@@ -14,4 +14,4 @@ class Example:
         self.internal = Data()
 
 
-view(Example())
+squiz(Example())
