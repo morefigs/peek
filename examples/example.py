@@ -12,10 +12,14 @@ class Data:
 
 class Example:
     _foo = 'FOO'
+    __bar = 'BAR'
 
     def __init__(self):
-        self.bar = 123
         self.data = Data()
+        self.data_cls = Data
+
+    class Inner:
+        pass
 
 
 squiz(Example())

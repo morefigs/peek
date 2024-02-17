@@ -7,12 +7,12 @@ _NONE = '\33[0m'
 _GREY = '\33[90m'
 _BLUE = '\033[34m'
 
-_BUILTIN_TYPES = tuple(value for name, value in getmembers(builtins) if type(value) is type)
+_BUILTIN_TYPES = tuple(value for _, value in getmembers(builtins) if type(value) is type)
 
 
 def _squiz(obj: object, depth: int):
-    # Don't bother inspecting built-in types
-    if type(obj) not in _BUILTIN_TYPES:
+    # Don't bother further inspecting built-in types (int, str, Exception, ...), except for 'type' itself
+    if type(obj) not in _BUILTIN_TYPES or type(obj) is type:
         for name, value in getmembers(obj):
             # Ignore hidden members and magic methods
             if not name.startswith('__'):
