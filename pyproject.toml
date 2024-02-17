@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "peek"
+name = "view"
 version = "0.1.0"
-description = "Peek at a Python object's direct and nested attributes."
+description = "View a Python object's direct and nested attributes."
 authors = ["morefigs"]
 readme = "README.md"
 

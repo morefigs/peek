@@ -1,4 +1,4 @@
-from peek import peek
+from view import view
 
 
 class Data:
@@ -14,4 +14,4 @@ class Example:
         self.internal = Data()
 
 
-peek(Example())
+view(Example())

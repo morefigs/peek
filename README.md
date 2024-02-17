@@ -1,13 +1,13 @@
-# peek
+# view
 
-Peek at a Python object's direct and nested attributes.
+View a Python object's direct and nested attributes.
 
 ## Installation
 
-Install from [PyPI](https://pypi.org/project/peek/):
+Install from [PyPI](https://pypi.org/project/view/):
 
 ```shell
-pip install peek
+pip install view
 ```
 
 ## Usage

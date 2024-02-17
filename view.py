@@ -10,7 +10,7 @@ _BLUE = '\033[34m'
 _BUILTIN_TYPES = tuple(value for name, value in getmembers(builtins) if type(value) is type)
 
 
-def _peek(obj: object, depth: int):
+def _view(obj: object, depth: int):
     for name, value in getmembers(obj):
         if not name.startswith('__'):
             type_ = type(value)
@@ -19,14 +19,13 @@ def _peek(obj: object, depth: int):
 
             # Only recursively inspect attributes that aren't built-in types
             if type_ not in _BUILTIN_TYPES:
-                _peek(value, depth + 1)
+                _view(value, depth + 1)
 
 
-def peek(obj: object) -> None:
+def view(obj: object) -> None:
     """
-    Print the direct and nested attribute names, types, and values of the target object.
-    :param obj: The target object.
+    Prints the direct and nested attribute names, types, and values of the target object.
     """
     print(f'{_GREY}{{{type(obj).__name__}}} {_NONE}{obj}')
 
-    _peek(obj, 0)
+    _view(obj, 0)
