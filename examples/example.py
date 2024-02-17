@@ -2,8 +2,12 @@ from squiz import squiz
 
 
 class Data:
+    @property
+    def contents(self):
+        return self._contents
+
     def __init__(self):
-        self.data = {1: 'a', 2: 'b'}
+        self._contents = {1: 'a', 2: 'b'}
 
 
 class Example:
@@ -11,7 +15,7 @@ class Example:
 
     def __init__(self):
         self.bar = 123
-        self.internal = Data()
+        self.data = Data()
 
 
 squiz(Example())

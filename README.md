@@ -1,6 +1,6 @@
 # squiz
 
-View a Python object's direct and nested attributes.
+View a Python object's direct and nested members.
 
 ## Installation
 

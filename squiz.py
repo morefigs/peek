@@ -11,21 +11,23 @@ _BUILTIN_TYPES = tuple(value for name, value in getmembers(builtins) if type(val
 
 
 def _squiz(obj: object, depth: int):
-    for name, value in getmembers(obj):
-        if not name.startswith('__'):
-            type_ = type(value)
+    # Don't bother inspecting built-in types
+    if type(obj) not in _BUILTIN_TYPES:
+        for name, value in getmembers(obj):
+            # Ignore hidden members and magic methods
+            if not name.startswith('__'):
+                # Print members details
+                print(f"{depth * '   ' + '   '}{_BLUE}{name} {_NONE}= {_GREY}{{{type(value).__name__}}} {_NONE}{value}")
 
-            print(f"{depth * '   ' + '   '}{_BLUE}{name} {_NONE}= {_GREY}{{{type_.__name__}}} {_NONE}{value}")
-
-            # Only recursively inspect attributes that aren't built-in types
-            if type_ not in _BUILTIN_TYPES:
+                # Recursively check nested members
                 _squiz(value, depth + 1)
 
 
 def squiz(obj: object) -> None:
     """
-    Prints the direct and nested attribute names, types, and values of the target object.
+    Prints the direct and nested member names, types, and values of the target object.
     """
+    # Print the target object details
     print(f'{_GREY}{{{type(obj).__name__}}} {_NONE}{obj}')
 
     _squiz(obj, 0)
