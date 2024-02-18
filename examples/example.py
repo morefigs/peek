@@ -1,25 +1,32 @@
 from squiz import squiz
 
 
-class Data:
+class Bar:
     @property
-    def contents(self):
-        return self._contents
+    def bar(self):
+        return self._bar
 
     def __init__(self):
-        self._contents = {1: 'a', 2: 'b'}
+        self._bar = {1: 'a', 2: 'b'}
 
 
-class Example:
-    _foo = 'FOO'
-    __bar = 'BAR'
+class Foo:
+    class InnerFoo:
+        inner_foo = ['inner', 'foo']
+
+    __foo = 12
+    _foo = 34
 
     def __init__(self):
-        self.data = Data()
-        self.data_cls = Data
+        self.bar = Bar()
+        self.bar_cls = Bar
 
-    class Inner:
+    def method(self):
+        pass
+
+    @staticmethod
+    def static_method():
         pass
 
 
-squiz(Example())
+squiz(Foo())

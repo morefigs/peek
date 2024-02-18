@@ -1,5 +1,4 @@
 from sys import stdlib_module_names
-import builtins
 from inspect import getmembers, isclass
 
 
@@ -8,7 +7,7 @@ _NONE = '\33[0m'
 _GREY = '\33[90m'
 _BLUE = '\033[34m'
 
-_BUILTIN_TYPES = tuple(value for _, value in getmembers(builtins) if type(value) is type)
+_GAP = '   '
 
 
 def _in_stdlib(obj: object) -> bool:
@@ -16,17 +15,17 @@ def _in_stdlib(obj: object) -> bool:
     return cls.__module__ in stdlib_module_names
 
 
-def _squiz(obj: object, depth: int):
-    # Don't bother further inspecting built-in types (int, str, Exception, ...), except for 'type' itself
-    if type(obj) not in _BUILTIN_TYPES or type(obj) is type:
-        for name, value in getmembers(obj):
-            # Ignore hidden members and magic methods
-            if not name.startswith('__'):
+def _squiz(obj: object, depth: int = 0):
+    # Don't bother further inspecting standard types
+    if not _in_stdlib(obj):
+        for name, member in getmembers(obj):
+            # Ignore magic methods for clarity
+            if not name.startswith('__') or not name.endswith('__'):
                 # Print members details
-                print(f"{depth * '   ' + '   '}{_BLUE}{name} {_NONE}= {_GREY}{{{type(value).__name__}}} {_NONE}{value}")
+                print(f"{_GAP * (depth + 1)}{_BLUE}{name} {_NONE}= {_GREY}{{{type(member).__name__}}} {_NONE}{member}")
 
                 # Recursively check nested members
-                _squiz(value, depth + 1)
+                _squiz(member, depth + 1)
 
 
 def squiz(obj: object) -> None:
@@ -36,4 +35,4 @@ def squiz(obj: object) -> None:
     # Print the target object details
     print(f'{_GREY}{{{type(obj).__name__}}} {_NONE}{obj}')
 
-    _squiz(obj, 0)
+    _squiz(obj)
