@@ -1,5 +1,6 @@
+from sys import stdlib_module_names
 import builtins
-from inspect import getmembers
+from inspect import getmembers, isclass
 
 
 # Terminal print colors
@@ -8,6 +9,11 @@ _GREY = '\33[90m'
 _BLUE = '\033[34m'
 
 _BUILTIN_TYPES = tuple(value for _, value in getmembers(builtins) if type(value) is type)
+
+
+def _in_stdlib(obj: object) -> bool:
+    cls = obj if isclass(obj) else type(obj)
+    return cls.__module__ in stdlib_module_names
 
 
 def _squiz(obj: object, depth: int):
