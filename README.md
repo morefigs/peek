@@ -12,4 +12,4 @@ pip install squiz
 
 ## Usage
 
-![](examples/example.png)
+![examples/example.png](https://github.com/morefigs/squiz/blob/main/examples/example.png)
