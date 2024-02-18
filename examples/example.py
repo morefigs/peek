@@ -1,32 +1,20 @@
 from squiz import squiz
 
 
-class Bar:
-    @property
-    def bar(self):
-        return self._bar
+class Quest:
+    def __init__(self, aim: str, completed: bool):
+        self.aim = aim
+        self.completed = completed
 
+
+class Person:
     def __init__(self):
-        self._bar = {1: 'a', 2: 'b'}
+        self.name = 'Arthur'
+        self.occupation = 'King'
+        self.quest = Quest('To find the Holy Grail', False)
 
+print('>>> from squiz import squiz')
+print('>>> squiz(arthur)')
+print()
 
-class Foo:
-    class InnerFoo:
-        inner_foo = ['inner', 'foo']
-
-    __foo = 12
-    _foo = 34
-
-    def __init__(self):
-        self.bar = Bar()
-        self.bar_cls = Bar
-
-    def method(self):
-        pass
-
-    @staticmethod
-    def static_method():
-        pass
-
-
-squiz(Foo())
+squiz(Person())

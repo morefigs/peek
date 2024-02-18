@@ -12,3 +12,4 @@ pip install squiz
 
 ## Usage
 
+![](examples/example.png)

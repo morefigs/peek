@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "squiz"
-version = "0.1.4"
+version = "0.1.5"
 description = "View a Python object's direct and nested members."
 authors = ["morefigs"]
 readme = "README.md"

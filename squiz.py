@@ -5,7 +5,7 @@ from inspect import getmembers, isclass
 # Terminal print colors
 _NONE = '\33[0m'
 _GREY = '\33[90m'
-_BLUE = '\033[34m'
+_BLUE = '\33[34m'
 
 _GAP = '   '
 
