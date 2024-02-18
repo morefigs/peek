@@ -13,8 +13,5 @@ class Person:
         self.occupation = 'King'
         self.quest = Quest('To find the Holy Grail', False)
 
-print('>>> from squiz import squiz')
-print('>>> squiz(arthur)')
-print()
 
 squiz(Person())
