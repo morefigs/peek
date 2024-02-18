@@ -12,4 +12,6 @@ pip install squiz
 
 ## Usage
 
+See [examples/example.py](examples/example.py)
+
 ![example/example.png](examples/example.png)
