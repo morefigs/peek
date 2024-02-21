@@ -5,7 +5,7 @@ from functools import partial
 
 import pytest
 
-from squiz import S_PROTECTED, S_RESET, C_NAME, C_NAME_FUNC, C_EQUALS, C_PUNC, C_CLS, C_VALUE, in_stdlib, \
+from squiz.squiz import S_PROTECTED, S_RESET, C_NAME, C_NAME_FUNC, C_EQUALS, C_PUNC, C_CLS, C_VALUE, in_stdlib, \
     is_function_like, is_member_of, get_members, get_name_str, get_type_str, get_value_str
 
 
