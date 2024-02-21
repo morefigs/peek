@@ -32,6 +32,14 @@ class Funcs:
     def func_static(*args):
         pass
 
+    @property
+    def getset(self):
+        return
+
+    @getset.setter
+    def getset(self, value):
+        pass
+
 
 class FuncsChild(Funcs, OSError):
     pass
@@ -56,6 +64,7 @@ class Child(Parent):
 
 
 @pytest.mark.parametrize('result, obj', (
+        (True, object),
         (True, int),
         (True, str),
         (True, ABC),
@@ -63,6 +72,7 @@ class Child(Parent):
         (True, datetime),
         (True, ZeroDivisionError),
 
+        (True, object()),
         (True, 123),
         (True, 'asdf'),
         (True, ABC()),
@@ -71,7 +81,6 @@ class Child(Parent):
         (True, ZeroDivisionError('oops')),
 
         (False, Funcs),
-
         (False, Funcs())
 ))
 def test_in_stdlib(result: bool, obj: type):
@@ -111,6 +120,8 @@ def test_in_stdlib(result: bool, obj: type):
         (False, 'asdf'),
         (False, Funcs),
         (False, Funcs()),
+        (False, Funcs.getset),
+        (False, Funcs().getset),
 ))
 def test_is_function_like(result: bool, obj: object):
     assert is_function_like(obj) == result
