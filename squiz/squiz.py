@@ -134,24 +134,35 @@ def get_value_str(obj: object) -> str:
     )
 
 
-def _squiz(obj: object, depth: int = 0):
-    # Don't bother further inspecting standard types
-    if not in_stdlib(obj):
-        for name, member in get_members(obj):
+def _inspect_members(obj: object, parent_classes: list[type], depth: int = 0) -> None:
+    """
+    Recursive function for inspecting and printing info of members and their members.
+    """
+    for name, member in get_members(obj):
+        # Print members details
+        print(_GAP * (depth + 1), get_name_str(name, is_function_like(member)), get_type_str(member),
+              get_value_str(member))
 
-            # Print members details
-            print(_GAP * (depth + 1), get_name_str(name, is_function_like(member)), get_type_str(member),
-                  get_value_str(member))
+        member_cls = member if isclass(member) else type(member)
 
-            # Recursively check nested members
-            _squiz(member, depth + 1)
+        # Don't further inspect members that have the same class as any of its parents, to prevent infinite recursion
+        # Don't further inspect members that are standard types (properties of standard types aren't interesting)
+        if member_cls not in parent_classes and not in_stdlib(member):
+            # Add the member's class to a list copy, to prevent list cross contamination between recursion branches
+            parent_classes_copy = parent_classes.copy()
+            parent_classes_copy.append(member_cls)
+
+            _inspect_members(member, parent_classes_copy, depth + 1)
 
 
 def squiz(obj: object) -> None:
     """
     Prints the direct and nested member names, types, and values of the target object.
     """
-    # Print the target object's details
+    # Print the main object's details only (we can't easily know it's variable name)
     print(get_type_str(obj), get_value_str(obj))
 
-    _squiz(obj)
+    # Don't further inspect standard types (properties of standard types aren't interesting)
+    if not in_stdlib(obj):
+        cls = obj if isclass(obj) else type(obj)
+        _inspect_members(obj, parent_classes=[cls])
