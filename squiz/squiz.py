@@ -20,6 +20,7 @@ C_EQUALS = Fore.RESET
 C_PUNC = Fore.LIGHTBLACK_EX
 C_CLS = Fore.WHITE
 C_VALUE = Fore.RESET
+C_RESET = Fore.RESET
 
 _GAP = '   '
 
@@ -137,25 +138,28 @@ def get_value_str(obj: object) -> str:
     )
 
 
-def _inspect_members(obj: object, parent_classes: list[type], depth: int = 0) -> None:
+def _inspect_object(obj: object, parent_classes: list[type], depth: int = 0) -> None:
     """
     Recursive function for inspecting and printing info of an object's members and their members.
     """
+    parent_classes.append(get_cls(obj))
+
     for name, member in get_members(obj):
+        in_parent_classes = get_cls(member) in parent_classes
+
         # Print members details
-        print(_GAP * (depth + 1), get_name_str(name, is_function_like(member)), get_type_str(member),
-              get_value_str(member))
+        print(_GAP * (depth + 1),
+              get_name_str(name, is_function_like(member)),
+              get_type_str(member),
+              get_value_str(member),
+              # Prints a few dots just to show that recursion will be cut short here
+              f'{C_CLS}{"..." if in_parent_classes else ""}{C_RESET}')
 
-        member_cls = get_cls(member)
-
-        # Don't further inspect members that have the same class as any of its parents, to prevent infinite recursion
         # Don't further inspect members that are standard types (properties of standard types aren't interesting)
-        if member_cls not in parent_classes and not in_stdlib(member):
-            # Add the member's class to a list copy, to prevent list cross contamination between recursion branches
-            parent_classes_copy = parent_classes.copy()
-            parent_classes_copy.append(member_cls)
-
-            _inspect_members(member, parent_classes_copy, depth + 1)
+        # Don't further inspect members that have the same class as any of its parents, to prevent infinite recursion
+        if not in_stdlib(member) and not in_parent_classes:
+            # Use a list copy to prevent list cross contamination between recursion branches
+            _inspect_object(member, parent_classes.copy(), depth + 1)
 
 
 def squiz(obj: object) -> None:
@@ -163,9 +167,9 @@ def squiz(obj: object) -> None:
     Prints the direct and nested member names, types, and values of the target object.
     """
     # Print the root object's details only (we can't easily know it's variable name)
-    print(get_type_str(obj), get_value_str(obj))
+    print(get_type_str(obj),
+          get_value_str(obj))
 
     # Don't further inspect standard types (properties of standard types aren't interesting)
     if not in_stdlib(obj):
-        cls = obj if isclass(obj) else type(obj)
-        _inspect_members(obj, parent_classes=[cls])
+        _inspect_object(obj, [])
