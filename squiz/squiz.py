@@ -151,12 +151,14 @@ def _inspect_object(obj: object, parent_classes: list[type], depth: int = 0) -> 
         in_parent_classes = get_cls(member) in parent_classes
 
         # Print members details
-        print(_GAP * (depth + 1),
-              get_name_str(name, is_function_like(member), is_inherited),
-              get_type_str(member),
-              get_value_str(member),
-              # Prints a few dots just to show that recursion will be cut short here
-              f'{C_CLS}{"..." if in_parent_classes else ""}{C_RESET}')
+        print(''.join((
+            _GAP * (depth + 1),
+            ' '.join((
+                get_name_str(name, is_function_like(member), is_inherited),
+                get_type_str(member),
+                get_value_str(member))),
+            # Prints a few dots just to show that recursion will be cut short here
+            f'{C_CLS}{" ..." if in_parent_classes else ""}{C_RESET}')))
 
         # Don't further inspect members that are standard types (properties of standard types aren't interesting)
         # Don't further inspect members that have the same class as any of its parents, to prevent infinite recursion
