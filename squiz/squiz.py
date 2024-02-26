@@ -10,7 +10,7 @@ ITALIC = '\033[3m'
 ITALIC_RESET = '\033[0m'
 
 # Styles
-S_PROTECTED = ITALIC
+S_INHERITED = ITALIC
 S_RESET = ITALIC_RESET
 
 # Colors
@@ -64,12 +64,10 @@ def get_members(obj: object,
                 include_inherited: bool = True,
                 include_inherited_stdlib: bool = False,
                 include_magics: bool = False,
-
-                ) -> list[tuple[str, object]]:
+                ) -> list[tuple[str, object, bool]]:
     """
     Get the members as (name, value) pairs of an object.
     """
-    # Get base classes
     bases = get_cls(obj).__bases__
 
     # Get bases classes that are in the standard lib
@@ -86,20 +84,21 @@ def get_members(obj: object,
     # Get all members with that match the criteria
     members = []
     for name, value in getmembers(obj):
+        is_inherited = is_member_of(name, bases)
         if (
-                (include_inherited or not is_member_of(name, bases))
+                (include_inherited or not is_inherited)
                 and (include_inherited_stdlib or name not in bases_stdlib_member_names)
                 and (include_magics or not name.startswith('__') or not name.endswith('__'))
         ):
-            members.append((name, value))
+            members.append((name, value, is_inherited))
     return members
 
 
-def get_name_str(name: str, is_function: bool) -> str:
+def get_name_str(name: str, is_function: bool, is_inherited: bool) -> str:
     """
     Generates the name str, e.g. "foo =".
     """
-    style = S_PROTECTED if name.startswith('_') else ''
+    style = S_INHERITED if is_inherited else ''
     color = C_NAME_FUNC if is_function else C_NAME
 
     return (
@@ -144,12 +143,12 @@ def _inspect_object(obj: object, parent_classes: list[type], depth: int = 0) -> 
     """
     parent_classes.append(get_cls(obj))
 
-    for name, member in get_members(obj):
+    for name, member, is_inherited in get_members(obj):
         in_parent_classes = get_cls(member) in parent_classes
 
         # Print members details
         print(_GAP * (depth + 1),
-              get_name_str(name, is_function_like(member)),
+              get_name_str(name, is_function_like(member), is_inherited),
               get_type_str(member),
               get_value_str(member),
               # Prints a few dots just to show that recursion will be cut short here

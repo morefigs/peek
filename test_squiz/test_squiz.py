@@ -5,7 +5,7 @@ from functools import partial
 
 import pytest
 
-from squiz.squiz import S_PROTECTED, S_RESET, C_NAME, C_NAME_FUNC, C_EQUALS, C_PUNC, C_CLS, C_VALUE, get_cls, \
+from squiz.squiz import S_INHERITED, S_RESET, C_NAME, C_NAME_FUNC, C_EQUALS, C_PUNC, C_CLS, C_VALUE, get_cls, \
     in_stdlib, is_function_like, is_member_of, get_members, get_name_str, get_type_str, get_value_str
 
 
@@ -158,26 +158,27 @@ def test_is_member_of(result: bool, name: str, classes: tuple[type, ...]):
 
 @pytest.mark.parametrize('result, obj, include_inherited, include_inherited_stdlib, include_magics', (
         ([
-             ('_Child__a', Child._Child__a),
-             ('_Child__b', Child._Child__b),
-             ('_c', Child._c),
-             ('_d', Child._d),
-             ('e', Child.e),
-             ('f', Child.f),
+             # (name, value, is_inherited)
+             ('_Child__a', Child._Child__a, False),
+             ('_Child__b', Child._Child__b, False),
+             ('_c', Child._c, False),
+             ('_d', Child._d, False),
+             ('e', Child.e, False),
+             ('f', Child.f, False),
         ], Child, False, False, False),
         ([
-             ('_Child__a', Child._Child__a),
-             ('_Child__b', Child._Child__b),
-             ('_Parent__u', Child._Parent__u),
-             ('_Parent__v', Child._Parent__v),
-             ('_c', Child._c),
-             ('_d', Child._d),
-             ('_w', Child._w),
-             ('_x', Child._x),
-             ('e', Child.e),
-             ('f', Child.f),
-             ('y', Child.y),
-             ('z', Child.z),
+             ('_Child__a', Child._Child__a, False),
+             ('_Child__b', Child._Child__b, False),
+             ('_Parent__u', Child._Parent__u, True),
+             ('_Parent__v', Child._Parent__v, True),
+             ('_c', Child._c, False),
+             ('_d', Child._d, False),
+             ('_w', Child._w, True),
+             ('_x', Child._x, True),
+             ('e', Child.e, False),
+             ('f', Child.f, False),
+             ('y', Child.y, True),
+             ('z', Child.z, True),
          ], Child, True, False, False),
 ))
 def test_get_members(result: list[tuple[str, object]],
@@ -188,14 +189,14 @@ def test_get_members(result: list[tuple[str, object]],
     assert get_members(obj, include_inherited, include_inherited_stdlib, include_magics) == result
 
 
-@pytest.mark.parametrize('result, name, is_function', (
-        (f'{C_NAME}member{S_RESET}{C_EQUALS} =', 'member', False),
-        (f'{C_NAME_FUNC}func{S_RESET}{C_EQUALS} =', 'func', True),
-        (f'{S_PROTECTED}{C_NAME}_protected_member{S_RESET}{C_EQUALS} =', '_protected_member', False),
-        (f'{S_PROTECTED}{C_NAME_FUNC}_protected_func{S_RESET}{C_EQUALS} =', '_protected_func', True),
+@pytest.mark.parametrize('result, name, is_function, is_inherited', (
+        (f'{C_NAME}member{S_RESET}{C_EQUALS} =', 'member', False, False),
+        (f'{C_NAME_FUNC}func{S_RESET}{C_EQUALS} =', 'func', True, False),
+        (f'{S_INHERITED}{C_NAME}member{S_RESET}{C_EQUALS} =', 'member', False, True),
+        (f'{S_INHERITED}{C_NAME_FUNC}func{S_RESET}{C_EQUALS} =', 'func', True, True),
 ))
-def test_get_name_str(result: str, name: str, is_function: bool):
-    assert get_name_str(name, is_function) == result
+def test_get_name_str(result: str, name: str, is_function: bool, is_inherited: bool):
+    assert get_name_str(name, is_function, is_inherited) == result
 
 
 @pytest.mark.parametrize('result, obj', (
