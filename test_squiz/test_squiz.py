@@ -5,8 +5,8 @@ from functools import partial
 
 import pytest
 
-from squiz.squiz import S_PROTECTED, S_RESET, C_NAME, C_NAME_FUNC, C_EQUALS, C_PUNC, C_CLS, C_VALUE, in_stdlib, \
-    is_function_like, is_member_of, get_members, get_name_str, get_type_str, get_value_str
+from squiz.squiz import S_PROTECTED, S_RESET, C_NAME, C_NAME_FUNC, C_EQUALS, C_PUNC, C_CLS, C_VALUE, get_cls, \
+    in_stdlib, is_function_like, is_member_of, get_members, get_name_str, get_type_str, get_value_str
 
 
 def func():
@@ -61,6 +61,22 @@ class Child(Parent):
     def _d(self): pass
     e = None
     def f(self): pass
+
+
+@pytest.mark.parametrize('obj, type_', (
+        (object, object),
+        (object(), object),
+        (int, int),
+        (123, int),
+        (str, str),
+        ('asdf', str),
+        (Child, Child),
+        (Child(), Child),
+        (Parent, Parent),
+        (Parent(), Parent),
+))
+def test_get_cls(obj: object, type_: type):
+    assert get_cls(obj) is type_
 
 
 @pytest.mark.parametrize('result, obj', (
