@@ -1,17 +1,26 @@
 from squiz import squiz
 
 
-class Quest:
-    def __init__(self, aim: str, completed: bool):
-        self.aim = aim
-        self.completed = completed
+class Character:
+    def __init__(self, name):
+        self.name = name
+
+    def say_ni(self):
+        pass
 
 
-class Person:
-    def __init__(self):
-        self.name = 'Arthur'
-        self.occupation = 'King'
-        self.quest = Quest('To find the Holy Grail', False)
+class Squire(Character):
+    pass
 
 
-squiz(Person())
+class King(Character):
+    def __init__(self, name, squire):
+        super().__init__(name)
+        self.squire = squire
+
+    def seek_grail(self):
+        pass
+
+
+arthur = King('Arthur', Squire('Patsy'))
+squiz(arthur)
