@@ -198,7 +198,7 @@ def test_get_members(result: list[tuple[str, object]],
 
 
 def test_get_members_all():
-    names = [name for name, _, _ in get_members(Klass)]
+    names = [name for name, _, _ in get_members(Klass, True, True, True)]
     for name in ('foo', 'bar', 'add_note', 'name', '__module__', '__weakref__', '__delattr__', '__init__'):
         assert name in names
 

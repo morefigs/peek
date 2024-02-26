@@ -63,7 +63,7 @@ def is_member_of(name: str, classes: tuple[type, ...]) -> bool:
 def get_members(obj: object,
                 include_inherited: bool = True,
                 include_inherited_stdlib: bool = False,
-                include_magics: bool = False,
+                include_magic: bool = False,
                 ) -> list[tuple[str, object, bool]]:
     """
     Get the members as (name, value) pairs of an object.
