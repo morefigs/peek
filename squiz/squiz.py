@@ -85,10 +85,14 @@ def get_members(obj: object,
     members = []
     for name, value in getmembers(obj):
         is_inherited = is_member_of(name, bases)
+        is_inherited_stdlib = name in bases_stdlib_member_names
+        is_magic = name.startswith('__') and name.endswith('__')
+
+        # All conditions must be met
         if (
                 (include_inherited or not is_inherited)
-                and (include_inherited_stdlib or name not in bases_stdlib_member_names)
-                and (include_magics or not name.startswith('__') or not name.endswith('__'))
+                and (include_inherited_stdlib or not is_inherited_stdlib)
+                and (include_magic or not is_magic)
         ):
             members.append((name, value, is_inherited))
     return members
